@@ -37,7 +37,7 @@
     </action>
 
     <action id="copySourceAction" class="com.hum.jhelper.actions.CopySourceAction" text="Copy Source"
-            icon="/icons/copy.svg" description="Copies Source">
+            icon="/icons/copy.svg" description="Copy Source">
     </action>
 
     <group id="JHelper.Group" text="JHelper" class="com.intellij.openapi.actionSystem.DefaultActionGroup">
