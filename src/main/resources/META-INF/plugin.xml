@@ -27,4 +27,30 @@
 
   </extensions>
 
+  <actions>
+    <action id="editTestsAction" class="com.hum.jhelper.actions.EditTestsAction" text="Edit Tests"
+            description="Edit Tests" icon="/icons/edit.svg">
+    </action>
+
+    <action id="editProjectPropertiesAction" class="com.hum.jhelper.actions.EditProjectPropertiesAction"
+            text="Edit Project Properties" description="Edit Project Properties" icon="/icons/setting.svg">
+    </action>
+
+    <action id="copySourceAction" class="com.hum.jhelper.actions.CopySourceAction" text="Copy Source"
+            icon="/icons/copy.svg" description="Copies source to clipboard">
+
+    </action>
+
+    <group id="JHelper.Group" text="JHelper" class="com.intellij.openapi.actionSystem.DefaultActionGroup">
+      <separator/>
+      <reference ref="copySourceAction"/>
+      <reference ref="editTestsAction"/>
+      <reference ref="editProjectPropertiesAction"/>
+      <separator/>
+      <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
+      <!--      <add-to-group group-id="MainMenu" anchor="last"/>-->
+      <!--      <add-to-group group-id="NavBarToolBar" anchor="first"/>-->
+    </group>
+
+  </actions>
 </idea-plugin>
