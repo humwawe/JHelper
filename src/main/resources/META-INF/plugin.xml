@@ -27,12 +27,18 @@
 
   </extensions>
 
+  <projectListeners>
+    <listener class="com.hum.jhelper.JHelperMain"
+              topic="com.intellij.openapi.project.ProjectManagerListener">
+    </listener>
+  </projectListeners>
+
   <actions>
     <action id="editTestsAction" class="com.hum.jhelper.actions.EditTestsAction" text="Edit Tests"
             description="Edit Tests" icon="/icons/edit.svg">
     </action>
 
-    <action id="editProjectPropertiesAction" class="com.hum.jhelper.actions.EditProjectPropertiesAction"
+    <action id="editProjectPropertiesAction" class="com.hum.jhelper.actions.EditJHelperPropertiesAction"
             text="Edit Project Properties" description="Edit Project Properties" icon="/icons/setting.svg">
     </action>
 
