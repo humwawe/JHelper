@@ -16,12 +16,10 @@ public class JHelperPropertiesDialog extends JDialog {
   private boolean isOk = false;
   private final DirectorySelector defaultDirectory;
   private final DirectorySelector outputDirectory;
-  //  private final ClassSelector inputClass;
-  //  private final ClassSelector outputClass;
-  //  private final JTextField excludePackages;
+  private final ClassSelector inputClass;
+  private final ClassSelector outputClass;
   private final JTextField author;
-  //  private final JLabel testDirectoryLabel;
-  private final int width = new JTextField(20).getPreferredSize().width;
+  private final int width = new JTextField(25).getPreferredSize().width;
 
   public JHelperPropertiesDialog(Project project, JHelperProperties data) {
     super(null, "Project settings", Dialog.ModalityType.APPLICATION_MODAL);
@@ -30,8 +28,8 @@ public class JHelperPropertiesDialog extends JDialog {
     this.data = data;
     defaultDirectory = new DirectorySelector(project, data.defaultDirectory);
     outputDirectory = new DirectorySelector(project, data.outputDirectory);
-    //    inputClass = new ClassSelector(data.inputClass, project);
-    //    outputClass = new ClassSelector(data.outputClass, project);
+    inputClass = new ClassSelector(data.inputClass, project);
+    outputClass = new ClassSelector(data.outputClass, project);
     author = new JTextField(data.author);
     OkCancelPanel main = new OkCancelPanel(new VerticalFlowLayout()) {
       @Override
@@ -59,13 +57,12 @@ public class JHelperPropertiesDialog extends JDialog {
     okCancelPanel.add(main.getCancelButton());
     main.add(new JLabel("Default directory:"));
     main.add(defaultDirectory);
-
     main.add(new JLabel("Output directory:"));
     main.add(outputDirectory);
-    //    main.add(new JLabel("Input class:"));
-    //    main.add(inputClass);
-    //    main.add(new JLabel("Output class:"));
-    //    main.add(outputClass);
+    main.add(new JLabel("Input class:"));
+    main.add(inputClass);
+    main.add(new JLabel("Output class:"));
+    main.add(outputClass);
     main.add(new JLabel("Author:"));
     main.add(author);
     main.add(okCancelPanel);
@@ -77,7 +74,7 @@ public class JHelperPropertiesDialog extends JDialog {
   }
 
   private void onChange() {
-    //    data = new JHelperProperties(inputClass.getText(), outputClass.getText(), excludePackages.getText().split(","), outputDirectory.getText(), author.getText(), archiveDirectory.getText(), defaultDirectory.getText(), testDirectory.getText(), enableUnitTests.isSelected(), failOnIntegerOverflowForNewTasks.isSelected(), JHelperProperties.CURRENT_LIBRARY_VERSION, smartTesting.isSelected(), true);
+    data = new JHelperProperties(inputClass.getText(), outputClass.getText(), outputDirectory.getText(), author.getText(), defaultDirectory.getText());
   }
 
   @Override

@@ -1,7 +1,10 @@
 package com.hum.jhelper.config;
 
 import com.hum.jhelper.constants.Constants;
+import com.hum.jhelper.utils.PlatformUtil;
+import com.hum.jhelper.utils.RunnableUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.*;
 import java.util.Properties;
@@ -27,11 +30,11 @@ public class JHelperProperties {
   }
 
   public JHelperProperties(Properties properties) {
-    inputClass = properties.getProperty("inputClass", DEFAULT.inputClass);
-    outputClass = properties.getProperty("outputClass", DEFAULT.outputClass);
-    outputDirectory = properties.getProperty("outputDirectory", DEFAULT.outputDirectory);
-    author = properties.getProperty("author", DEFAULT.author);
-    defaultDirectory = properties.getProperty("defaultDirectory", DEFAULT.defaultDirectory);
+    inputClass = properties.getProperty(Constants.INPUT_CLASS, DEFAULT.inputClass);
+    outputClass = properties.getProperty(Constants.OUTPUT_CLASS, DEFAULT.outputClass);
+    outputDirectory = properties.getProperty(Constants.OUTPUT_DIRECTORY, DEFAULT.outputDirectory);
+    author = properties.getProperty(Constants.AUTHOR, DEFAULT.author);
+    defaultDirectory = properties.getProperty(Constants.DEFAULT_DIRECTORY, DEFAULT.defaultDirectory);
   }
 
   public static JHelperProperties load(Project project) {
@@ -63,32 +66,36 @@ public class JHelperProperties {
   }
 
   public void save(Project project) {
-    // todo
-    //    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-    //      public void run() {
-    //        if (project == null) {
-    //          return;
-    //        }
-    //        VirtualFile root = project.getBaseDir();
-    //        if (root == null) {
-    //          return;
-    //        }
-    //        try {
-    //          VirtualFile config = root.findOrCreateChildData(null, "chelper.properties");
-    //          Properties properties = new Properties();
-    //          properties.setProperty("inputClass", inputClass);
-    //          properties.setProperty("outputClass", outputClass);
-    //          properties.setProperty("outputDirectory", outputDirectory);
-    //          properties.setProperty("author", author);
-    //          properties.setProperty("defaultDirectory", defaultDirectory);
-    //          OutputStream outputStream = config.getOutputStream(null);
-    //          properties.store(outputStream, "");
-    //          outputStream.close();
-    //        } catch (IOException e) {
-    //          throw new RuntimeException(e);
-    //        }
-    //      }
-    //    });
+    RunnableUtil.run(() -> {
+      if (project == null) {
+        return;
+      }
+      VirtualFile root = PlatformUtil.getVFBaseDir(project);
+      if (root == null) {
+        return;
+      }
+      try {
+        VirtualFile jHelperPath = root.findChild(Constants.JHELPER);
+        if (jHelperPath == null) {
+          jHelperPath = root.createChildDirectory(null, Constants.JHELPER);
+        }
+        VirtualFile config = jHelperPath.findChild(Constants.JHELPER_PROPERTIES);
+        if (config == null) {
+          config = jHelperPath.createChildData(null, Constants.JHELPER_PROPERTIES);
+        }
+        Properties properties = new Properties();
+        properties.setProperty(Constants.INPUT_CLASS, inputClass);
+        properties.setProperty(Constants.OUTPUT_CLASS, outputClass);
+        properties.setProperty(Constants.OUTPUT_DIRECTORY, outputDirectory);
+        properties.setProperty(Constants.AUTHOR, author);
+        properties.setProperty(Constants.DEFAULT_DIRECTORY, defaultDirectory);
+        OutputStream outputStream = config.getOutputStream(null);
+        properties.store(outputStream, "");
+        outputStream.close();
+      } catch (IOException e) {
+        throw new RuntimeException(" save project: " + e);
+      }
+    });
   }
 
 

@@ -1,6 +1,7 @@
 package com.hum.jhelper.ui;
 
 import com.hum.jhelper.utils.FileUtil;
+import com.hum.jhelper.utils.PlatformUtil;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.fileChooser.PathChooserDialog;
@@ -42,23 +43,23 @@ public class DirectorySelector extends JPanel {
         PathChooserDialog dialog = FileChooserFactory.getInstance().createPathChooser(new FileChooserDescriptor(false, true, false, false, false, false) {
           @Override
           public boolean isFileSelectable(VirtualFile file) {
-            return super.isFileSelectable(file) && (allowAllDirectories || FileUtil.isChild(FileUtil.getVFBaseDir(project), file));
+            return super.isFileSelectable(file) && (allowAllDirectories || FileUtil.isChild(PlatformUtil.getVFBaseDir(project), file));
           }
 
           @Override
           public boolean isFileVisible(VirtualFile file, boolean showHiddenFiles) {
-            return super.isFileVisible(file, showHiddenFiles) && (allowAllDirectories || (FileUtil.isChild(FileUtil.getVFBaseDir(project), file) || FileUtil.isChild(file, FileUtil.getVFBaseDir(project))));
+            return super.isFileVisible(file, showHiddenFiles) && (allowAllDirectories || (FileUtil.isChild(PlatformUtil.getVFBaseDir(project), file) || FileUtil.isChild(file, PlatformUtil.getVFBaseDir(project))));
           }
         }, project, DirectorySelector.this);
 
-        VirtualFile toSelect = allowAllDirectories ? VfsUtil.findFileByIoFile(new File(textField.getText()), false) : FileUtil.getVFBaseDir(project).findFileByRelativePath(textField.getText());
+        VirtualFile toSelect = allowAllDirectories ? VfsUtil.findFileByIoFile(new File(textField.getText()), false) : PlatformUtil.getVFBaseDir(project).findFileByRelativePath(textField.getText());
         if (toSelect == null) {
-          toSelect = FileUtil.getVFBaseDir(project);
+          toSelect = PlatformUtil.getVFBaseDir(project);
         }
 
         dialog.choose(toSelect, virtualFiles -> {
           if (virtualFiles.size() == 1) {
-            String path = allowAllDirectories ? virtualFiles.get(0).getPath() : FileUtil.getRelativePath(FileUtil.getVFBaseDir(project), virtualFiles.get(0));
+            String path = allowAllDirectories ? virtualFiles.get(0).getPath() : FileUtil.getRelativePath(PlatformUtil.getVFBaseDir(project), virtualFiles.get(0));
             if (path != null) {
               textField.setText(path);
             }
